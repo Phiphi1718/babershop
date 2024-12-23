@@ -19,7 +19,7 @@ def create_app():
     # Cấu hình database
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
         'DATABASE_URL',  # Lấy DATABASE_URL từ file .env
-        'mssql+pyodbc://localhost/HairSalon?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes&TrustServerCertificate=yes'
+        'sqlite:///data.db'  # Sử dụng SQLite
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
