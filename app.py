@@ -21,10 +21,7 @@ def create_app():
         'mssql+pyodbc://localhost/HairSalon?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes&TrustServerCertificate=yes'
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv(
-        'SECRET_KEY', 
-        'n@)_tcqh0w_)+29#*8096nh4sw3#p&ojmlm$&r$z#j2y6+amet'
-    )
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'n@)_tcqh0w_)+29#*8096nh4sw3#p&ojmlm$&r$z#j2y6+amet')
 
     # Khởi tạo extensions
     db.init_app(app)
@@ -35,10 +32,8 @@ def create_app():
             # Test kết nối database
             db.session.execute(text('SELECT 1'))
             print("Kết nối database thành công!")
-            
-            # Tạo tất cả bảng trong database (Chỉ nên dùng trong môi trường phát triển)
-            if app.config.get('FLASK_ENV') == 'development':
-                db.create_all()
+            # Tạo tất cả bảng trong database
+            db.create_all()
         except Exception as e:
             print(f"Lỗi kết nối database: {str(e)}")
             raise e
@@ -46,7 +41,6 @@ def create_app():
     # Đăng ký blueprint
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
-    # Định nghĩa route gốc
     @app.route('/')
     def home():
         return jsonify({
@@ -56,13 +50,9 @@ def create_app():
 
     return app
 
+# Tạo ứng dụng
+app = create_app()
+
+# Chạy ứng dụng nếu file được thực thi trực tiếp
 if __name__ == '__main__':
-    # Tạo ứng dụng Flask
-    app = create_app()
-    
-    # Chạy ứng dụng
-    app.run(
-        host='0.0.0.0',
-        port=int(os.getenv('PORT', 8000)), 
-        debug=os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
-    )
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8000)), debug=True)
